@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import TodoListItem from "./TodoListItem";
+import TodoContext from "../todoContext/contextTodo";
 
 const TodoListWrapper = styled.div`
 	max-width: 500px;
@@ -11,10 +11,12 @@ const TodoListWrapper = styled.div`
 	overflow: auto;
 `;
 
-const TodoList = ({ todos, onRemove, onUpdate }) => {
+const TodoList = ({ onRemove, onUpdate }) => {
+	const { state } = useContext(TodoContext);
+
 	return (
 		<TodoListWrapper>
-			{todos.map((v) => (
+			{state.map((v) => (
 				<TodoListItem
 					key={v.id}
 					todo={v}
@@ -24,12 +26,6 @@ const TodoList = ({ todos, onRemove, onUpdate }) => {
 			))}
 		</TodoListWrapper>
 	);
-};
-
-TodoListWrapper.prototypes = {
-	todos: PropTypes.array.isRequired,
-	onRemove: PropTypes.func.isRequired,
-	onUpdate: PropTypes.func.isRequired,
 };
 
 export default TodoList;

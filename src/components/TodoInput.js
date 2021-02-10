@@ -1,8 +1,8 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useContext } from "react";
 import { Form, Input } from "antd";
 import styled from "styled-components";
 import { EnterOutlined } from "@ant-design/icons";
-import PropTypes from "prop-types";
+import TodoContext from "../todoContext/contextTodo";
 
 const InputWrapper = styled.div`
 	max-width: 500px;
@@ -13,8 +13,9 @@ const InputStyled = styled(Input)`
 	max-width: 500px;
 `;
 
-const TodoInput = ({ onTextSubmit }) => {
+const TodoInput = () => {
 	const [text, setText] = useState("");
+	const { actions } = useContext(TodoContext);
 
 	const onChangeText = useCallback(
 		(e) => {
@@ -23,12 +24,16 @@ const TodoInput = ({ onTextSubmit }) => {
 		[text],
 	);
 
+	const onTextSubmit = useCallback(() => {
+		actions.onInsert(text);
+		setText("");
+	}, [text]);
+
 	return (
 		<InputWrapper>
 			<Form
 				onFinish={() => {
-					onTextSubmit(text);
-					setText("");
+					onTextSubmit();
 				}}
 			>
 				<InputStyled
@@ -39,10 +44,6 @@ const TodoInput = ({ onTextSubmit }) => {
 			</Form>
 		</InputWrapper>
 	);
-};
-
-TodoInput.prototypes = {
-	onTextSubmit: PropTypes.func.isRequired,
 };
 
 export default TodoInput;
