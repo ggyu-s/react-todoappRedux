@@ -1,7 +1,7 @@
-import React, { useContext } from "react";
+import React from "react";
 import styled from "styled-components";
+import { useSelector } from "react-redux";
 import TodoListItem from "./TodoListItem";
-import TodoContext from "../todoContext/contextTodo";
 
 const TodoListWrapper = styled.div`
 	max-width: 500px;
@@ -11,18 +11,12 @@ const TodoListWrapper = styled.div`
 	overflow: auto;
 `;
 
-const TodoList = ({ onRemove, onUpdate }) => {
-	const { state } = useContext(TodoContext);
-
+const TodoList = () => {
+	const { todos } = useSelector((state) => state.todoReducer);
 	return (
 		<TodoListWrapper>
-			{state.map((v) => (
-				<TodoListItem
-					key={v.id}
-					todo={v}
-					onRemove={onRemove}
-					onUpdate={onUpdate}
-				/>
+			{todos.map((v) => (
+				<TodoListItem key={v.id} todo={v} />
 			))}
 		</TodoListWrapper>
 	);

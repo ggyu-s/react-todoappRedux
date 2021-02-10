@@ -1,8 +1,8 @@
-import React, { useState, useCallback, useContext } from "react";
+import React, { useState, useCallback, useRef } from "react";
 import { Form, Input } from "antd";
 import styled from "styled-components";
 import { EnterOutlined } from "@ant-design/icons";
-import TodoContext from "../todoContext/contextTodo";
+import { useDispatch } from "react-redux";
 
 const InputWrapper = styled.div`
 	max-width: 500px;
@@ -15,7 +15,8 @@ const InputStyled = styled(Input)`
 
 const TodoInput = () => {
 	const [text, setText] = useState("");
-	const { actions } = useContext(TodoContext);
+	const dispatch = useDispatch();
+	const userId = useRef(2);
 
 	const onChangeText = useCallback(
 		(e) => {
@@ -25,17 +26,17 @@ const TodoInput = () => {
 	);
 
 	const onTextSubmit = useCallback(() => {
-		actions.onInsert(text);
+		dispatch({
+			type: "TODO_INPUT",
+			data: { text, id: userId.current, checked: false },
+		});
+		userId.current++;
 		setText("");
 	}, [text]);
 
 	return (
 		<InputWrapper>
-			<Form
-				onFinish={() => {
-					onTextSubmit();
-				}}
-			>
+			<Form onFinish={() => onTextSubmit()}>
 				<InputStyled
 					value={text}
 					onChange={onChangeText}
